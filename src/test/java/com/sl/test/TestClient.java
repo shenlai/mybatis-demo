@@ -21,10 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 
 
-//使用mapper.userMapper.xml配置文件
+//使用productMapper.xml配置文件
 public class TestClient {
 
-	//定义SqlSession
+	//定义会话SqlSession
 	SqlSession session =null;
 	
 	@Before
@@ -38,7 +38,7 @@ public class TestClient {
 		InputStream inputStream = Resources.getResourceAsStream(resource);
 		SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
 		SqlSessionFactory factory = builder.build(inputStream);
-		//根据sqlSessionFactory产生session
+		//根据sqlSessionFactory产生会话sqlsession
 		session = factory.openSession();	
 	}
 
@@ -52,6 +52,7 @@ public class TestClient {
 		{
 			System.out.println(product);
 		}
+		//关闭会话
 		session.close();	
 	}
 	
