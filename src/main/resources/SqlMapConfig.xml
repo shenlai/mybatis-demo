@@ -3,7 +3,11 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 <!-- 加载配置文件 -->
-	<properties resource="db.properties"></properties>
+	<properties resource="db.properties">
+		<property name="username" value="root"/>
+  		<property name="password" value="123456"/>
+	</properties>
+	
 	<environments default="development">
 		<!-- id属性必须和上面的defaut一致 -->
 		<environment id="development">
