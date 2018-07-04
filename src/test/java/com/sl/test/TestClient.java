@@ -138,7 +138,7 @@ public class TestClient {
 	}
 	
 	//vo包装对象
-	@Test
+	//@Test
 	public void testselectProductByVo() {
 		
 		String statement = "com.sl.mapper.ProductMapper.selectProductByVo";
@@ -150,6 +150,25 @@ public class TestClient {
 		vo.setProduct(po);
 		
 		List<Product> listProduct = session.selectList(statement,vo);
+		for (Product product : listProduct) {
+			System.out.println(product);
+		}
+		
+		// 关闭会话
+		session.close();
+	}
+	
+	//hashmap
+	@Test
+	public void testselectProductByHashMap() {
+		
+		String statement = "com.sl.mapper.ProductMapper.selectProductByHashMap";
+		
+		HashMap<String, Object> map =new HashMap<String, Object>();
+		map.put("cityCode", "A02");
+		map.put("isNew", true);
+		
+		List<Product> listProduct = session.selectList(statement,map);
 		for (Product product : listProduct) {
 			System.out.println(product);
 		}

@@ -52,6 +52,11 @@
       select * from products where citycode=#{product.cityCode} and isnew =#{product.isNew} 
     </select>
     
+    <!-- hashmap -->
+     <select id="selectProductByHashMap" parameterType="hashmap" resultType="com.sl.po.Product">
+      select * from products where citycode=#{cityCode} and isnew =#{isNew} 
+    </select>
+    
     
     
    
