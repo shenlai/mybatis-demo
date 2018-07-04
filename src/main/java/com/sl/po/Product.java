@@ -9,6 +9,15 @@ public class Product {
 	private BigDecimal UnitPrice;
 	private String ImageUrl;
 	private Boolean IsNew;
+	private String cityCode;
+
+	public String getCityCode() {
+		return cityCode;
+	}
+
+	public void setCityCode(String cityCode) {
+		this.cityCode = cityCode;
+	}
 
 	public int getId() {
 		return Id;

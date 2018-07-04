@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import com.sl.po.Product;
 import com.sl.po.ProductInfo;
+import com.sl.po.ProductVo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -97,7 +98,70 @@ public class TestClient {
 
 	/*********************************************************************************************************************/
 	// 配置输入参数映射
-
+	//@Test
+	public void testSelectByProductName() {
+		//使用like '%${value}%'
+		String statement = "com.sl.mapper.ProductMapper.selectProductByName";
+		List<Product> listProduct = session.selectList(statement,"琶洲");
+		for (Product product : listProduct) {
+			System.out.println(product);
+		}
+		
+		System.out.println("***************************************************");
+		
+		//使用 like #{value}
+		String statement2 = "com.sl.mapper.ProductMapper.selectProductByName2";
+		List<Product> listProduct2 = session.selectList(statement2,"%国际%");
+		for (Product product : listProduct2) {
+			System.out.println(product);
+		}
+		// 关闭会话
+		session.close();
+	}
+	
+	//pojo
+	//@Test
+	public void testselectProductByPoJo() {
+		
+		String statement = "com.sl.mapper.ProductMapper.selectProductByPoJo";
+		Product pro = new Product();
+		pro.setUnitPrice(new BigDecimal(30));
+		pro.setIsNew(true);
+		
+		List<Product> listProduct = session.selectList(statement,pro);
+		for (Product product : listProduct) {
+			System.out.println(product);
+		}
+		
+		// 关闭会话
+		session.close();
+	}
+	
+	//vo包装对象
+	@Test
+	public void testselectProductByVo() {
+		
+		String statement = "com.sl.mapper.ProductMapper.selectProductByVo";
+		ProductVo vo= new ProductVo();
+		//vo.setCategory(category);
+		Product po =new Product();
+		po.setCityCode("A01");
+		po.setIsNew(true);
+		vo.setProduct(po);
+		
+		List<Product> listProduct = session.selectList(statement,vo);
+		for (Product product : listProduct) {
+			System.out.println(product);
+		}
+		
+		// 关闭会话
+		session.close();
+	}
+	
+	
+	
+	
+	
 	// 见xml配置
 
 	// 配置输出结果集映射 resultType 和 resultMap
@@ -112,7 +176,7 @@ public class TestClient {
 	}
 	
 	//resultMap
-	@Test
+	//@Test
 	public void testselectProductInfo() {
 		String statement = "com.sl.mapper.ProductMapper.selectProductInfo";
 
