@@ -21,7 +21,9 @@ import com.sl.po.ProductVo;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 //使用productMapper.xml配置文件
 public class TestClient {
@@ -98,93 +100,89 @@ public class TestClient {
 
 	/*********************************************************************************************************************/
 	// 配置输入参数映射
-	//@Test
+	// @Test
 	public void testSelectByProductName() {
-		//使用like '%${value}%'
+		// 使用like '%${value}%'
 		String statement = "com.sl.mapper.ProductMapper.selectProductByName";
-		List<Product> listProduct = session.selectList(statement,"琶洲");
+		List<Product> listProduct = session.selectList(statement, "琶洲");
 		for (Product product : listProduct) {
 			System.out.println(product);
 		}
-		
+
 		System.out.println("***************************************************");
-		
-		//使用 like #{value}
+
+		// 使用 like #{value}
 		String statement2 = "com.sl.mapper.ProductMapper.selectProductByName2";
-		List<Product> listProduct2 = session.selectList(statement2,"%国际%");
+		List<Product> listProduct2 = session.selectList(statement2, "%国际%");
 		for (Product product : listProduct2) {
 			System.out.println(product);
 		}
 		// 关闭会话
 		session.close();
 	}
-	
-	//pojo
-	//@Test
+
+	// pojo
+	// @Test
 	public void testselectProductByPoJo() {
-		
+
 		String statement = "com.sl.mapper.ProductMapper.selectProductByPoJo";
 		Product pro = new Product();
 		pro.setUnitPrice(new BigDecimal(30));
 		pro.setIsNew(true);
-		
-		List<Product> listProduct = session.selectList(statement,pro);
+
+		List<Product> listProduct = session.selectList(statement, pro);
 		for (Product product : listProduct) {
 			System.out.println(product);
 		}
-		
+
 		// 关闭会话
 		session.close();
 	}
-	
-	//vo包装对象
-	//@Test
+
+	// vo包装对象
+	// @Test
 	public void testselectProductByVo() {
-		
+
 		String statement = "com.sl.mapper.ProductMapper.selectProductByVo";
-		ProductVo vo= new ProductVo();
-		//vo.setCategory(category);
-		Product po =new Product();
+		ProductVo vo = new ProductVo();
+		// vo.setCategory(category);
+		Product po = new Product();
 		po.setCityCode("A01");
 		po.setIsNew(true);
 		vo.setProduct(po);
-		
-		List<Product> listProduct = session.selectList(statement,vo);
+
+		List<Product> listProduct = session.selectList(statement, vo);
 		for (Product product : listProduct) {
 			System.out.println(product);
 		}
-		
+
 		// 关闭会话
 		session.close();
 	}
-	
-	//hashmap
-	@Test
+
+	// hashmap
+	// @Test
 	public void testselectProductByHashMap() {
-		
+
 		String statement = "com.sl.mapper.ProductMapper.selectProductByHashMap";
-		
-		HashMap<String, Object> map =new HashMap<String, Object>();
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("cityCode", "A02");
 		map.put("isNew", true);
-		
-		List<Product> listProduct = session.selectList(statement,map);
+
+		List<Product> listProduct = session.selectList(statement, map);
 		for (Product product : listProduct) {
 			System.out.println(product);
 		}
-		
+
 		// 关闭会话
 		session.close();
 	}
-	
-	
-	
-	
-	
+
 	// 见xml配置
 
 	// 配置输出结果集映射 resultType 和 resultMap
-	//@Test
+	// @Test
 	public void testCountProduct() {
 		String statement = "com.sl.mapper.ProductMapper.countProducts";
 
@@ -193,8 +191,8 @@ public class TestClient {
 		session.commit();// insert 需要commit
 		session.close();
 	}
-	
-	//resultMap
+
+	// resultMap
 	//@Test
 	public void testselectProductInfo() {
 		String statement = "com.sl.mapper.ProductMapper.selectProductInfo";
@@ -205,12 +203,11 @@ public class TestClient {
 		}
 		session.close();
 	}
-	
 
 	/***********************************************************************************************************************/
 	// 查询所有user表所有数据
 	// @Test
-	public void testSelectAllUser() {
+	public void testSelectAllProduct() {
 		String statement = "com.sl.mapper.ProductMapper.selectAllProduct";
 		List<Product> listProduct = session.selectList(statement);
 		for (Product product : listProduct) {
@@ -219,5 +216,39 @@ public class TestClient {
 		// 关闭会话
 		session.close();
 	}
+
+	//pojo->hashmap
+	@Test
+	public void testSelectProductById() {
+		String statement = "com.sl.mapper.ProductMapper.selectProductById2";
+		HashMap<String, Object> map = session.selectOne(statement, 1);
+
+		Iterator<Map.Entry<String, Object>> it = map.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, Object> entry = it.next();
+			System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
+		}
+		// 关闭会话
+		session.close();
+	}
+	
+	  //list<pojo> -> hashmap
+		//@Test
+		public void testSelectProducts2() {
+			String statement = "com.sl.mapper.ProductMapper.selectAllProduct2";
+			
+			List<HashMap<String, Object>> list = session.selectList(statement);
+
+			for (HashMap<String, Object> map : list) {
+				Iterator<Map.Entry<String, Object>> it = map.entrySet().iterator();
+				while (it.hasNext()) {
+					Map.Entry<String, Object> entry = it.next();
+					System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
+				}
+			}
+			
+			// 关闭会话
+			session.close();
+		}
 
 }

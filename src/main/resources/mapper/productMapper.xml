@@ -38,6 +38,7 @@
      <select id="selectProductByName" parameterType="string" resultType="com.sl.po.Product">
       select * from products where name like '%${value}%'
      </select>
+     <!-- ${} 参数化 -->
       <select id="selectProductByName2" parameterType="string" resultType="com.sl.po.Product">
       select * from products where name like #{value}
      </select>
@@ -58,10 +59,6 @@
     </select>
     
     
-    
-   
-
-
     <!-- 配置输出映射 -->
     <!-- 使用resultType映射结果集  -->
 	<!-- 返回结果只有一行一列时可以使用基本数据类型 -->
@@ -79,6 +76,15 @@
 	注意 selectAllProduct返回的是集合，这种情况下resultType是集合包含的类型，而不能是集合本身 
 	-->
 	<select id="selectAllProduct" resultType="com.sl.po.Product">
+		select * from products
+	</select>
+	
+	<!-- 返回hashmap -->
+	<select id="selectProductById2" parameterType="int" resultType="hashmap">
+		select * from products where id = #{value}
+	</select>
+	<!-- 返回List<hashmap> -->
+	<select id="selectAllProduct2" resultType="hashmap">
 		select * from products
 	</select>
 	
