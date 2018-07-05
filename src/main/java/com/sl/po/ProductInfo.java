@@ -9,10 +9,17 @@ public class ProductInfo {
 	private String Description;
 	private String CityCode;
 	private String CityName;
+	private boolean IsNew;
 	
 	
 	public int getId() {
 		return Id;
+	}
+	public boolean isIsNew() {
+		return IsNew;
+	}
+	public void setIsNew(boolean isNew) {
+		IsNew = isNew;
 	}
 	public void setId(int id) {
 		Id = id;

@@ -62,7 +62,7 @@ public class TestClient {
 	public void testInsertProduct() {
 		String statement = "com.sl.mapper.ProductMapper.insertProduct";
 		Product product = new Product();
-		product.setName("小酒馆");
+		product.setName("小酒馆2222");
 		product.setDescription("xxxx");
 		product.setIsNew(true);
 		product.setUnitPrice(new BigDecimal(1000));
@@ -193,7 +193,7 @@ public class TestClient {
 	}
 
 	// resultMap
-	//@Test
+	// @Test
 	public void testselectProductInfo() {
 		String statement = "com.sl.mapper.ProductMapper.selectProductInfo";
 
@@ -217,8 +217,8 @@ public class TestClient {
 		session.close();
 	}
 
-	//pojo->hashmap
-	@Test
+	// pojo->hashmap
+	// @Test
 	public void testSelectProductById() {
 		String statement = "com.sl.mapper.ProductMapper.selectProductById2";
 		HashMap<String, Object> map = session.selectOne(statement, 1);
@@ -231,24 +231,136 @@ public class TestClient {
 		// 关闭会话
 		session.close();
 	}
-	
-	  //list<pojo> -> hashmap
-		//@Test
-		public void testSelectProducts2() {
-			String statement = "com.sl.mapper.ProductMapper.selectAllProduct2";
-			
-			List<HashMap<String, Object>> list = session.selectList(statement);
 
-			for (HashMap<String, Object> map : list) {
-				Iterator<Map.Entry<String, Object>> it = map.entrySet().iterator();
-				while (it.hasNext()) {
-					Map.Entry<String, Object> entry = it.next();
-					System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
-				}
+	// list<pojo> -> hashmap
+	// @Test
+	public void testSelectProducts2() {
+		String statement = "com.sl.mapper.ProductMapper.selectAllProduct2";
+
+		List<HashMap<String, Object>> list = session.selectList(statement);
+
+		for (HashMap<String, Object> map : list) {
+			Iterator<Map.Entry<String, Object>> it = map.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry<String, Object> entry = it.next();
+				System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
 			}
-			
+		}
+
+		// 关闭会话
+		session.close();
+	}
+
+	/********************************************************************************/
+	/********************************************************************************/
+	/********************************************************************************/
+	// 动态sql
+	// if
+	//@Test
+	public void testifTest() {
+		String statement = "com.sl.mapper.ProductMapper.ifTest";
+		ProductInfo info = new ProductInfo();
+		info.setCityCode("A01");
+		info.setProductName("%国际%");
+		// info.setDescription("%xx%"); //select * from products where isnew = ? and
+		// name like ?
+		List<Product> listProduct = session.selectList(statement, info);
+		for (Product pro : listProduct) {
+			System.out.println(pro);
+		}
+
+		// 关闭会话
+		session.close();
+	}
+
+	// choose, when, otherwise
+	//@Test
+	public void testchoosewhenotherwiseTest() {
+		String statement = "com.sl.mapper.ProductMapper.choosewhenotherwiseTest";
+		Product product = new Product();
+		product.setIsNew(true);
+		//product.setName("%国际%");
+		//prouct.setDescription("%xx%");
+		product.setUnitPrice(new BigDecimal(100));
+		List<Product> listProduct = session.selectList(statement, product);
+		for (Product pro : listProduct) {
+			System.out.println(pro);
+		}
+
+		// 关闭会话
+		session.close();
+	}
+	
+	//where 标签改写if
+	//@Test
+	public void testwhereTest() {
+		String statement = "com.sl.mapper.ProductMapper.whereTest";
+		Product product = new Product();
+		product.setCityCode("A01");
+		product.setName("%国际%");
+		//product.setDescription("%xx%");
+		product.setUnitPrice(new BigDecimal(100));
+		List<Product> listProduct = session.selectList(statement, product);
+		for (Product pro : listProduct) {
+			System.out.println(pro);
+		}
+
+		// 关闭会话
+		session.close();
+	}
+	
+	//if+set
+	//@Test
+		public void testsetTest() {
+			String statement = "com.sl.mapper.ProductMapper.setTest";
+			Product product = new Product();
+			product.setId(1);
+			product.setCityCode("A01");
+			//product.setName("SetTest酒店名称");
+			product.setDescription("SetTest酒店名称");
+			int count = session.update(statement, product);
+			session.commit();
+			System.out.println(count);
 			// 关闭会话
 			session.close();
 		}
+	
+	
+		//trim 改写set
+		@Test
+		public void testtrimsetTest() {
+			String statement = "com.sl.mapper.ProductMapper.trimsetTest";
+			Product product = new Product();
+			product.setId(1);
+			product.setCityCode("A02");
+			//product.setName("SetTest酒店名称");
+			product.setDescription("trimTest酒店名称");
+			int count = session.update(statement, product);
+			session.commit();
+			System.out.println(count);
+			// 关闭会话
+			session.close();
+		}
+	
+	
+	
+	
+	//trim 改写where
+	//@Test
+	public void testreimwhereTest() {
+		String statement = "com.sl.mapper.ProductMapper.trimwhereTest";
+		Product product = new Product();
+		product.setCityCode("A01");
+		product.setName("%国际%");
+		//prouct.setDescription("%xx%");
+		product.setUnitPrice(new BigDecimal(100));
+		List<Product> listProduct = session.selectList(statement, product);
+		for (Product pro : listProduct) {
+			System.out.println(pro);
+		}
+
+		// 关闭会话
+		session.close();
+	}
 
 }

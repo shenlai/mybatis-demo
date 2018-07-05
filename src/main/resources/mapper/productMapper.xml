@@ -6,79 +6,82 @@
 <!-- namespace:此处使用包名+文件名 的形式 -->
 <mapper namespace="com.sl.mapper.ProductMapper">
 
-	<!--select – 映射查询语句
-	   id:唯一标识 parameterType:参数类型，此处是根据id查询，类型为int resultType:返回值类型， 
+	<!--select – 映射查询语句 id:唯一标识 parameterType:参数类型，此处是根据id查询，类型为int resultType:返回值类型， 
 		#{id}： 参数 -->
 	<select id="selectProduct" parameterType="int" resultType="com.sl.po.Product">
 		select * from products where id = #{id}
 	</select>
-	
-	<!-- insert – 映射插入语句
-	  注： sql中参数最好和po中属性命名一致   
-	 -->
-	<insert id="insertProduct" parameterType="com.sl.po.Product">
-		insert into products(name,description,UnitPrice,IsNew)
+
+	<!-- insert – 映射插入语句 注： sql中参数最好和po中属性命名一致 -->
+	<insert id="insertProduct">
+		insert into
+		products(name,description,UnitPrice,IsNew)
 		values(#{name},#{description},#{UnitPrice},#{IsNew})
 	</insert>
-	
+
 	<!-- update – 映射更新语句 -->
 	<update id="updateProduct" parameterType="com.sl.po.Product">
-		update products set UnitPrice = #{UnitPrice},IsNew=#{IsNew} where id=#{id}
+		update products set
+		UnitPrice = #{UnitPrice},IsNew=#{IsNew} where id=#{id}
 	</update>
-	
-	<!-- delete – 映射删除语句-->
+
+	<!-- delete – 映射删除语句 -->
 	<delete id="deleteProduct" parameterType="int">
-		delete from products where id=#{id}
+		delete from products
+		where id=#{id}
 	</delete>
 
-    <!-- 配置输入映射 -->
-    <!-- 简单类型  -->
-    <!-- 参考  selectProduct-->
-    <!-- ${} sql拼接 -->
-     <select id="selectProductByName" parameterType="string" resultType="com.sl.po.Product">
-      select * from products where name like '%${value}%'
-     </select>
-     <!-- ${} 参数化 -->
-      <select id="selectProductByName2" parameterType="string" resultType="com.sl.po.Product">
-      select * from products where name like #{value}
-     </select>
-     
-    <!-- 传递pojo -->
-     <select id="selectProductByPoJo" parameterType="com.sl.po.Product" resultType="com.sl.po.Product">
-      select * from products where unitprice>#{UnitPrice} and isnew =#{IsNew} 
-    </select>
-    
-    <!-- 传递pojo包装对象 -->
-     <select id="selectProductByVo" parameterType="com.sl.po.ProductVo" resultType="com.sl.po.Product">
-      select * from products where citycode=#{product.cityCode} and isnew =#{product.isNew} 
-    </select>
-    
-    <!-- hashmap -->
-     <select id="selectProductByHashMap" parameterType="hashmap" resultType="com.sl.po.Product">
-      select * from products where citycode=#{cityCode} and isnew =#{isNew} 
-    </select>
-    
-    
-    <!-- 配置输出映射 -->
-    <!-- 使用resultType映射结果集  -->
-	<!-- 返回结果只有一行一列时可以使用基本数据类型 -->
-    <select id="countProducts" resultType="int">
-		select count(1) from products 
+	<!-- 配置输入映射 select 情况下可省略parameterType 和 resultType属性 -->
+	<!-- 简单类型 -->
+	<!-- 参考 selectProduct -->
+	<!-- ${} sql拼接 -->
+	<select id="selectProductByName" parameterType="string"
+		resultType="com.sl.po.Product">
+		select * from products where name like '%${value}%'
 	</select>
-	
-	<!-- 返回自定义类型
-	返回单个对象，  resultType为返回对象的类型
-	-->
+	<!-- ${} 参数化 -->
+	<select id="selectProductByName2" parameterType="string"
+		resultType="com.sl.po.Product">
+		select * from products where name like #{value}
+	</select>
+
+	<!-- 传递pojo -->
+	<select id="selectProductByPoJo" parameterType="com.sl.po.Product"
+		resultType="com.sl.po.Product">
+		select * from products where unitprice>#{UnitPrice} and isnew =#{IsNew}
+	</select>
+
+	<!-- 传递pojo包装对象 -->
+	<select id="selectProductByVo" parameterType="com.sl.po.ProductVo"
+		resultType="com.sl.po.Product">
+		select * from products where citycode=#{product.cityCode} and isnew
+		=#{product.isNew}
+	</select>
+
+	<!-- hashmap -->
+	<select id="selectProductByHashMap" parameterType="hashmap"
+		resultType="com.sl.po.Product">
+		select * from products where citycode=#{cityCode} and isnew =#{isNew}
+	</select>
+
+
+	<!-- 配置输出映射 -->
+	<!-- 使用resultType映射结果集 -->
+	<!-- 返回结果只有一行一列时可以使用基本数据类型 -->
+	<select id="countProducts" resultType="int">
+		select count(1) from
+		products
+	</select>
+
+	<!-- 返回自定义类型 返回单个对象， resultType为返回对象的类型 -->
 	<select id="selectProductById" parameterType="int" resultType="com.sl.po.Product">
 		select * from products where id = #{id}
 	</select>
-	<!-- 返回自定义类型 
-	注意 selectAllProduct返回的是集合，这种情况下resultType是集合包含的类型，而不能是集合本身 
-	-->
+	<!-- 返回自定义类型 注意 selectAllProduct返回的是集合，这种情况下resultType是集合包含的类型，而不能是集合本身 -->
 	<select id="selectAllProduct" resultType="com.sl.po.Product">
 		select * from products
 	</select>
-	
+
 	<!-- 返回hashmap -->
 	<select id="selectProductById2" parameterType="int" resultType="hashmap">
 		select * from products where id = #{value}
@@ -87,19 +90,127 @@
 	<select id="selectAllProduct2" resultType="hashmap">
 		select * from products
 	</select>
-	
-	
-	<!-- 使用resultMap映射结果集   -->
+
+
+	<!-- 使用resultMap映射结果集 -->
 	<select id="selectProductInfo" resultMap="productInfoResultMap">
-		select p.`Name` pName,p.Description,c.citycode,c.`name` cName 
-		from products  p
+		select p.`Name`
+		pName,p.Description,c.citycode,c.`name` cName
+		from products p
 		join city c
 		on p.citycode = c.citycode
 	</select>
 	<resultMap id="productInfoResultMap" type="com.sl.po.ProductInfo">
-  		<result property="ProductName" column="pName"/>
-  		<result property="CityName" column="cName"/>
+		<result property="ProductName" column="pName" />
+		<result property="CityName" column="cName" />
 	</resultMap>
+
+
+	<!-- 动态sql -->
+	<!-- https://www.yiibai.com/mybatis/mybaits_trim.html -->
+	<!-- if -->
+	<select id="ifTest" resultType="com.sl.po.Product">
+		select * from products where citycode = #{cityCode}
+		<if test="ProductName!=null">
+			and name like #{ProductName}
+		</if>
+		<if test="description!=null">
+			and description like #{Description}
+		</if>
+	</select>
+
+	<!-- trim + where + set -->
+	<!-- 使用where 标签改写if :where 元素只会在至少有一个子元素的条件返回 SQL 子句的情况下才去插入“WHERE”子句。而且，若语句的开头为“AND”或“OR”，where 
+		元素也会将它们去除 -->
+		<!-- if + where -->
+	<select id="whereTest" resultType="com.sl.po.Product">
+		select * from products
+		<where>
+			<if test="cityCode!=null">
+			   and citycode = #{cityCode}
+			   <!-- citycode = #{cityCode} -->
+			</if>
+			<if test="Name!=null">
+				and name like #{Name}
+			</if>
+			<if test="description!=null">
+				and description like #{Description}
+			</if>
+		</where>
+
+	</select>
+	
+	<!-- if + set -->
+	<update id="setTest">
+		update products
+		<set>
+			<if test="cityCode!=null">
+			  citycode = #{cityCode} ,
+			</if>
+			<if test="Name!=null">
+			   name = #{Name} ,
+			</if>
+			<if test="description!=null">
+				description = #{Description}
+			</if>
+		</set>
+		where id =#{id}
+	</update>
+	
+	
+	<!-- 使用trim处理where 和 set -->
+	<!-- if+trim -->
+	<select id="trimwhereTest" resultType="com.sl.po.Product">
+		select * from products
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="cityCode!=null">
+			   and citycode = #{cityCode}
+			   <!-- citycode = #{cityCode} -->
+			</if>
+			<if test="Name!=null">
+				and name like #{Name}
+			</if>
+			<if test="description!=null">
+				and description like #{Description}
+			</if>
+		</trim>
+
+	</select>
+	
+	<!-- trim 代替 set + -->
+	<update id="trimsetTest">
+	  update products
+	  <trim prefix="set" suffixOverrides=",">
+			<if test="cityCode!=null and cityCode!=''">
+			  citycode = #{cityCode} ,
+			</if>
+			<if test="Name!=null">
+			   name = #{Name} ,
+			</if>
+			<if test="description!=null">
+				description = #{Description}
+			</if>
+		</trim>
+		where id=#{id}
+	</update>
+	
+	<!-- choose + when + otherwise 只能选择一个作为查询条件 作用类似sql case when then -->
+	<select id="choosewhenotherwiseTest" resultType="com.sl.po.Product">
+		select * from products where isnew = #{IsNew}
+		<choose>
+			<when test="name!=null">
+				and name like #{Name}
+			</when>
+			<when test="description!=null">
+				and description like #{Description}
+			</when>
+			<otherwise>
+				and unitprice > #{UnitPrice}
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- foreach -->
 	
 	
 	
@@ -108,5 +219,23 @@
 	
 	
 	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </mapper>
