@@ -17,6 +17,7 @@ import org.junit.Test;
 import com.sl.po.Product;
 import com.sl.po.ProductInfo;
 import com.sl.po.ProductVo;
+import com.sl.po.ProductVo2;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -260,16 +261,13 @@ public class TestClient {
 	public void testifTest() {
 		String statement = "com.sl.mapper.ProductMapper.ifTest";
 		ProductInfo info = new ProductInfo();
-		info.setCityCode("A01");
+		info.setCityCode("A03");
 		info.setProductName("%国际%");
-		// info.setDescription("%xx%"); //select * from products where isnew = ? and
-		// name like ?
+		//info.setDescription("xx");
 		List<Product> listProduct = session.selectList(statement, info);
 		for (Product pro : listProduct) {
 			System.out.println(pro);
 		}
-
-		// 关闭会话
 		session.close();
 	}
 
@@ -310,14 +308,14 @@ public class TestClient {
 	}
 	
 	//if+set
-	//@Test
+	@Test
 		public void testsetTest() {
 			String statement = "com.sl.mapper.ProductMapper.setTest";
 			Product product = new Product();
 			product.setId(1);
-			product.setCityCode("A01");
+			//product.setCityCode("A01");
 			//product.setName("SetTest酒店名称");
-			product.setDescription("SetTest酒店名称");
+			//product.setDescription("SetTest酒店名称");
 			int count = session.update(statement, product);
 			session.commit();
 			System.out.println(count);
@@ -327,7 +325,7 @@ public class TestClient {
 	
 	
 		//trim 改写set
-		@Test
+		//@Test
 		public void testtrimsetTest() {
 			String statement = "com.sl.mapper.ProductMapper.trimsetTest";
 			Product product = new Product();
@@ -362,5 +360,62 @@ public class TestClient {
 		// 关闭会话
 		session.close();
 	}
+
+	
+	//foreach
+		//@Test
+		public void testforeachTest() {
+			String statement = "com.sl.mapper.ProductMapper.foreachTest";
+			List<Integer> list = new ArrayList<Integer>();
+			list.add(1);
+			list.add(2);
+			list.add(3);
+			
+			List<Product> listProduct = session.selectList(statement, list);
+			for (Product pro : listProduct) {
+				System.out.println(pro);
+			}
+
+			// 关闭会话
+			session.close();
+		}
+		
+		//@Test
+		public void testforeachVoTest() {
+			String statement = "com.sl.mapper.ProductMapper.foreachVoTest";
+			ProductVo2 vo2 = new ProductVo2();
+			vo2.setName("%国际%");
+			List<Integer> ids = new ArrayList<Integer>();
+			ids.add(11);
+			ids.add(12);
+			ids.add(13);
+			vo2.setIds(ids);
+			
+			List<Product> listProduct = session.selectList(statement, vo2);
+			for (Product pro : listProduct) {
+				System.out.println(pro);
+			}
+
+			// 关闭会话
+			session.close();
+		}
+
+		//sql 片段
+		//@Test
+		public void testsqlTest() {
+			String statement = "com.sl.mapper.ProductMapper.sqlTest";
+			Product product = new Product();
+			product.setCityCode("A01");
+			product.setName("%国际%");
+			//product.setDescription("%xx%");
+			product.setUnitPrice(new BigDecimal(100));
+			List<Product> listProduct = session.selectList(statement, product);
+			for (Product pro : listProduct) {
+				System.out.println(pro);
+			}
+
+			// 关闭会话
+			session.close();
+		}
 
 }

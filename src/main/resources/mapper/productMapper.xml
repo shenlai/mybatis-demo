@@ -110,12 +110,12 @@
 	<!-- https://www.yiibai.com/mybatis/mybaits_trim.html -->
 	<!-- if -->
 	<select id="ifTest" resultType="com.sl.po.Product">
-		select * from products where citycode = #{cityCode}
+		select * from products where 
 		<if test="ProductName!=null">
-			and name like #{ProductName}
+			name like #{ProductName}
 		</if>
 		<if test="description!=null">
-			and description like #{Description}
+			and description like CONCAT(CONCAT('%', #{Description, jdbcType=VARCHAR}),'%')
 		</if>
 	</select>
 
@@ -159,7 +159,7 @@
 	
 	
 	<!-- 使用trim处理where 和 set -->
-	<!-- if+trim -->
+	<!-- if+trim 使用trim代理where -->
 	<select id="trimwhereTest" resultType="com.sl.po.Product">
 		select * from products
 		<trim prefix="WHERE" prefixOverrides="AND |OR">
@@ -211,6 +211,69 @@
 	</select>
 	
 	<!-- foreach -->
+	<!-- index：为数组的下标。
+	     item：为数组每个元素的名称，名称随意定义 
+	      open：循环开始 
+	      close：循环结束
+	      separator：中间分隔输出 
+	    -->
+	<!-- 只有一个List参数时它的参数名为list，即collection="list" ;  如果参数类型时数组object[],则  collection="array" -->
+ 	<select id="foreachTest" resultType="com.sl.po.Product">
+ 	 select * from products 
+ 	 <where>
+ 	 <if test="list!=null">
+ 	  <foreach item="id" index="index"  collection="list" open="id in(" separator="," close=")">#{id}</foreach>
+ 	 </if>
+ 	 </where>
+ 	 
+	</select>
+	
+	<!-- 通过pojo传递list, collection值为pojo中对应的属性名-->
+ 	<select id="foreachVoTest" resultType="com.sl.po.Product">
+ 	 select * from products 
+ 	 <where>
+ 	 <if test="name!=null"> and name like #{name} </if>
+ 	 <if test="ids!=null">
+ 	  <foreach item="item" index="index"  collection="ids" open="and id in(" separator="," close=")">#{item}</foreach>
+ 	 </if>
+ 	 </where>
+ 	 
+	</select>
+	
+	
+	<!-- Sql 片段  Sql中可将重复的sql提取出来，使用时用include引用即可，最终达到sql重用的目的-->
+	
+	<select id="sqlTest" resultType="com.sl.po.Product">
+		select * from products
+		<where>
+		<include refid="sqltemp"/>
+		  <!-- 
+			<if test="cityCode!=null">
+			   and citycode = #{cityCode}
+			</if>
+			<if test="Name!=null">
+				and name like #{Name}
+			</if>
+			<if test="description!=null">
+				and description like #{Description}
+			</if>
+			 -->
+		</where>
+
+	</select>
+	<!-- 将where条件提取 -->
+	<sql id="sqltemp">
+	<if test="cityCode!=null">
+			   and citycode = #{cityCode}
+			</if>
+			<if test="Name!=null">
+				and name like #{Name}
+			</if>
+			<if test="description!=null">
+				and description like #{Description}
+			</if>
+	</sql>
+	
 	
 	
 	
