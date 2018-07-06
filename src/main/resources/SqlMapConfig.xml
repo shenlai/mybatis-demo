@@ -21,8 +21,12 @@
 			</dataSource>
 		</environment>
 	</environments>
-		<mappers>
-		<!-- xml实现    注册productMapper.xml文件 -->
-		<mapper resource="mapper/productMapper.xml"></mapper>
+	<mappers>
+		<!-- 注册productMapper.xml文件 -->
+		<!-- <mapper resource="mapper/productMapper.xml"></mapper> --> <!-- mapper.xml文件和mapper接口可以不在一个包下  -->
+		
+		<!-- 注册mapper接口 -->
+		<mapper class="com.sl.mapper.ProductMapper"></mapper> <!--通过注册mapper接口方式： Mapper接口和mapper.xml必须在同一个包下 -->
+		
 	</mappers>
 </configuration>
