@@ -49,13 +49,13 @@ public class TestProductMapperClient {
 	}
 
 	// select by id
-	@Test
+	//@Test
 	public void testSelectProduct() {
 
 		// 获取mapper接口的代理对象
-		ProductMapper userMapper = session.getMapper(ProductMapper.class);
+		ProductMapper productMapper = session.getMapper(ProductMapper.class);
 
-		List<Product> listProduct = userMapper.selectAllProduct();
+		List<Product> listProduct = productMapper.selectAllProduct();
 
 		for (Product product : listProduct) {
 			System.out.println(product);
@@ -63,5 +63,24 @@ public class TestProductMapperClient {
 		// 关闭会话
 		session.close();
 	}
+	
+	    @Test
+		public void testwhereTest() {
+			Product product = new Product();
+			product.setCityCode("A01");
+			product.setName("%国际%");
+			//product.setDescription("%xx%");
+			//product.setUnitPrice(new BigDecimal(100));
+			ProductVo vo = new ProductVo();
+			vo.setProduct(product);
+			ProductMapper productMapper = session.getMapper(ProductMapper.class);
+			List<Product> listProduct = productMapper.selectProductsByVo(vo);
+			for (Product pro : listProduct) {
+				System.out.println(pro);
+			}
+
+			// 关闭会话
+			session.close();
+		}
 
 }

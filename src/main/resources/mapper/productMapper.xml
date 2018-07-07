@@ -274,6 +274,23 @@
 			</if>
 	</sql>
 	
+	<select id="selectProductsByVo" resultType="com.sl.po.Product">
+		select * from products
+		<where>
+			<if test="product.cityCode!=null">
+			   and citycode = #{product.cityCode}
+			   <!-- citycode = #{cityCode} -->
+			</if>
+			<if test="product.Name!=null">
+				and name like #{product.Name}
+			</if>
+			<if test="product.Description!=null">
+				and description like #{product.Description}
+			</if>
+		</where>
+
+	</select>
+	
 	
 	
 	
