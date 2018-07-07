@@ -5,8 +5,26 @@
 
 <!-- 关联查询 -->
 <mapper namespace="com.sl.mapper.UnitMapper">
-
+	<!-- 一对一查询 关联查询   使用resultType映射结果集-->
+	<select id="oneToOneTest" resultType="com.sl.po.ProductDetailInfo">
+		select p.*,c.id categoryId,c.name categoryName,c.remark categoryRemark from products p
+		join category c
+		on p.categoryId= c.Id
+	</select>
 	
-
-
+	<!-- 一对一查询 关联查询   使用resultMap映射结果集-->
+	<select id="oneToOneTestMap" resultMap="productInfoMap">
+		select p.*,c.id categoryId,c.name categoryName,c.remark categoryRemark  from products p
+		join category c
+		on p.categoryId= c.Id
+		
+	</select>
+	<resultMap id="productInfoMap" type="com.sl.po.Product">
+	  <result column="id" property="id" /><!-- 映射product属性，如果数据库字段名 与javabean属性名不一致，可以通过此处mapping  -->
+	  <association property="category" javaType="com.sl.po.Category">
+	    <id column="categoryId" property="Id"/>
+	    <result column="categoryName" property="Name" />
+	    <result column="categoryRemark" property="Remark" />
+	  </association>
+	</resultMap>
 </mapper>

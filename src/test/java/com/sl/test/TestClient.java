@@ -49,7 +49,7 @@ public class TestClient {
 	}
 
 	// select by id
-	// @Test
+	//@Test
 	public void testSelectProduct() {
 		String statement = "com.sl.mapper.ProductMapper.selectProduct";
 		Product product = session.selectOne(statement, 1);
