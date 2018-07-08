@@ -16,10 +16,12 @@ import org.junit.Test;
 
 import com.sl.mapper.ProductMapper;
 import com.sl.mapper.UnitMapper;
+import com.sl.po.Category;
 import com.sl.po.Product;
 import com.sl.po.ProductDetailInfo;
 import com.sl.po.ProductInfo;
 import com.sl.po.ProductVo;
+import com.sl.po.User;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,39 +51,128 @@ public class TestUnitMapperClient {
 		session = factory.openSession();
 	}
 
-	//一对一  使用resultType映射结果集
-	//@Test
+	// 一对一 使用resultType映射结果集
+	// @Test
 	public void testSelectProduct() {
 
 		// 获取mapper接口的代理对象
 		UnitMapper unitMapper = session.getMapper(UnitMapper.class);
 
-		List<ProductDetailInfo> listInfo = unitMapper.oneToOneTest();
+		ProductDetailInfo detailInfo = unitMapper.oneToOneTest(1);
 
-		System.out.println(listInfo.size());
+		System.out.println(detailInfo);
+
+		// 关闭会话
+		session.close();
+	}
+
+	// 一对一 使用resultMap映射结果集
+	// @Test
+	public void testSelectProduct2() {
+
+		// 获取mapper接口的代理对象
+		UnitMapper unitMapper = session.getMapper(UnitMapper.class);
+
+		Product product = unitMapper.oneToOneTestMap(2);
+
+		System.out.println(product);
+
+		System.out.println(product.getCategory().toString());
+
+		// 关闭会话
+		session.close();
+	}
+
+	// 一对多
+	//@Test
+	public void oneToManyTest() {
+
+		UnitMapper unitMapper = session.getMapper(UnitMapper.class);
+
+		Category catrgoryInfo = unitMapper.oneToManyTest(1);
+
+		System.out.println(catrgoryInfo);
+
+		if (catrgoryInfo.getProductList().size() > 0) {
+			for (Product pro : catrgoryInfo.getProductList()) {
+				System.out.println(pro);
+			}
+		}
+
+		// 关闭会话
+		session.close();
+
+	}
+		
+	
+	//多对多
+	@Test
+	public void manyToManyTest() {
+
+		UnitMapper unitMapper = session.getMapper(UnitMapper.class);
+
+		User userOrder = unitMapper.manyToManyTest(1);
+
+		System.out.println(userOrder);
+		
+		// 关闭会话
+		session.close();
+
+	}
+	
+	
+	//嵌套查询
+	//一对一
+	
+	//@Test
+	public void testSelectProductTest() {
+
+		// 获取mapper接口的代理对象
+		UnitMapper unitMapper = session.getMapper(UnitMapper.class);
+
+		Product product = unitMapper.oneToOneTestAssociationSelect(2);
+
+		System.out.println(product);
+
+		System.out.println(product.getCategory().toString());
 
 		// 关闭会话
 		session.close();
 	}
 	
-	   //一对一  使用resultMap映射结果集
-		@Test
-		public void testSelectProduct2() {
+	//集合嵌套查询
+	@Test
+	public void testoneToManyTestCollectionSelect() {
 
-			// 获取mapper接口的代理对象
-			UnitMapper unitMapper = session.getMapper(UnitMapper.class);
+		// 获取mapper接口的代理对象
+		UnitMapper unitMapper = session.getMapper(UnitMapper.class);
 
-			List<Product> listInfo = unitMapper.oneToOneTestMap();
+		Category category = unitMapper.oneToManyTestCollectionSelect(1);
 
-			System.out.println(listInfo.size());
-			
-			for (Product product : listInfo) {
-				System.out.println(product);
-				System.out.println(product.getCategory().getName());
-				
+		System.out.println(category);
+
+		if (category.getProductList().size() > 0) {
+			for (Product pro : category.getProductList()) {
+				System.out.println(pro);
 			}
-			// 关闭会话
-			session.close();
 		}
+		// 关闭会话
+		session.close();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

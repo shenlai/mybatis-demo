@@ -5,26 +5,183 @@
 
 <!-- 关联查询 -->
 <mapper namespace="com.sl.mapper.UnitMapper">
-	<!-- 一对一查询 关联查询   使用resultType映射结果集-->
-	<select id="oneToOneTest" resultType="com.sl.po.ProductDetailInfo">
-		select p.*,c.id categoryId,c.name categoryName,c.remark categoryRemark from products p
+	<!-- 一对一查询 关联查询 使用resultType映射结果集 -->
+	<select id="oneToOneTest" parameterType="int"
+		resultType="com.sl.po.ProductDetailInfo">
+		select p.*,c.id
+		categoryId,c.name categoryName,c.remark
+		categoryRemark from products p
 		join category c
 		on p.categoryId= c.Id
+		where p.id =#{value}
 	</select>
-	
-	<!-- 一对一查询 关联查询   使用resultMap映射结果集-->
-	<select id="oneToOneTestMap" resultMap="productInfoMap">
-		select p.*,c.id categoryId,c.name categoryName,c.remark categoryRemark  from products p
+
+	<!-- 一对一查询 关联查询 使用resultMap映射结果集 -->
+	<select id="oneToOneTestMap" parameterType="int" resultMap="productInfoMap">
+		select p.*,c.id
+		categoryId,c.name categoryName,c.remark categoryRemark
+		from products p
 		join category c
 		on p.categoryId= c.Id
-		
+		where p.id
+		=#{value}
 	</select>
 	<resultMap id="productInfoMap" type="com.sl.po.Product">
-	  <result column="id" property="id" /><!-- 映射product属性，如果数据库字段名 与javabean属性名不一致，可以通过此处mapping  -->
-	  <association property="category" javaType="com.sl.po.Category">
-	    <id column="categoryId" property="Id"/>
-	    <result column="categoryName" property="Name" />
-	    <result column="categoryRemark" property="Remark" />
-	  </association>
+		<id column="id" property="Id" />
+		<result column="name" property="Name" />
+		<result column="description" property="Description" />
+		<result column="unitprice" property="UnitPrice" />
+		<result column="imageUrl" property="ImageUrl" />
+		<result column="isnew" property="IsNew" />
+		<result column="citycode" property="cityCode" />
+		<association property="category" javaType="com.sl.po.Category">
+			<id column="categoryId" property="Id" />
+			<result column="categoryName" property="Name" />
+			<result column="categoryRemark" property="Remark" />
+		</association>
 	</resultMap>
+
+
+	<!-- 一对多映射 -->
+	<select id="oneToManyTest" resultMap="categoryInfo">
+		select c.id cid,c.`name`
+		cname,c.remark, p.*
+		from category c
+		join products p
+		on p.categoryId= c.Id
+		where c.id= #{cid}
+	</select>
+	<resultMap type="com.sl.po.Category" id="categoryInfo">
+		<id column="cid" property="id" />
+		<result column="cname" property="name" />
+		<result column="remark" property="remark" />
+		<!-- collection变迁关联当前分类下产品信息   property映射集合结果，ofType结果集类型 -->
+		<collection property="productList" ofType="com.sl.po.Product">
+			<id property="id" column="id" javaType="int" jdbcType="INTEGER" />
+			<result column="name" property="Name" />
+			<result column="description" property="Description" />
+			<result column="unitprice" property="UnitPrice" />
+			<result column="imageUrl" property="ImageUrl" />
+			<result column="isnew" property="IsNew" />
+			<result column="citycode" property="cityCode" />
+		</collection>
+	</resultMap>
+
+
+	<!-- 多对多映射 查询用户信息及对应订单信息，订单详情 -->
+	<!-- select * from orders o join `user` u on o.userId = u.id join orderItem 
+		i on o.Id = i.orderid join products p on i.productid = p.Id -->
+	<select id="manyToManyTest" resultMap="userAndOrderInfo">
+		select u.*,
+		o.id oid,
+		o.createtime ocreatetime,
+		o.userid ouserid,
+		o.amount oamount,
+		o.remark
+		oremark,
+		i.id iid,
+		i.orderid iorderid,
+		i.productid iproductid,
+		i.createtime icreatetime,
+		i.number inumber,
+		i.price iprice,
+
+		p.id pid,
+		p.`name` pname,
+		p.Description pdescription
+
+		from orders o
+		join `user` u on
+		o.userId = u.id
+		join orderItem i on o.Id = i.orderid
+		join products p on
+		i.productid = p.Id
+		where u.id=#{id}
+	</select>
+	<resultMap type="com.sl.po.User" id="userAndOrderInfo">
+		<id column="id" property="id" />
+		<result column="sex" property="sex" />
+		<result column="birthday" property="birthday" />
+		<result column="address" property="address" />
+		<result column="username" property="userName" />
+		<!-- 映射用户对应的订单信息,一个用户可以有多个订单 -->
+		<collection property="orders" ofType="com.sl.po.Order">
+			<id column="oid" property="id" />
+			<result column="ocreatetime" property="createTime" />
+			<result column="ouserid" property="userId" />
+			<result column="oamount" property="amount" />
+			<result column="oremark" property="remark" />
+			<!-- 订单对应的商品信息，一个订单可以有多个商品  -->
+			<collection property="orderItems" ofType="com.sl.po.OrderItem">
+				<id column="iid" property="id" />
+				<result column="iorderid" property="orderId" />
+				<result column="iproductid" property="productId" />
+				<result column="icreatetime" property="createTime" />
+				<result column="inumber" property="number" />
+				<result column="iprice" property="price" />
+				<!-- 映射商品信息 （OrderItem与商品product 一一对应）-->
+				<association property="product" javaType="com.sl.po.Product">
+					<id column="pid" property="Id" />
+					<result column="pname" property="Name" />
+					<result column="pdescription" property="Description" />
+				</association>
+			</collection>
+
+		</collection>
+	</resultMap>
+
+
+	<!-- 嵌套查询 -->
+	
+	<!-- 关联嵌套查询  -->
+	<select id="oneToOneTestAssociationSelect" parameterType="int" resultMap="productInfoMap2">
+		select p.*
+		from products p
+		where p.id =#{value}
+	</select>
+	<resultMap id="productInfoMap2" type="com.sl.po.Product" >
+		<id column="id" property="Id" />
+		<result column="name" property="Name" />
+		<result column="description" property="Description" />
+		<result column="unitprice" property="UnitPrice" />
+		<result column="imageUrl" property="ImageUrl" />
+		<result column="isnew" property="IsNew" />
+		<result column="citycode" property="cityCode" />
+		<!-- column：传递子查询参数，如果要处理符复合主键，使用column= "{prop1=col1,prop2=col2}"  -->
+		<!-- select：子查询语句id -->
+		<association property="category" javaType="com.sl.po.Category" column="categoryId" select="selectCategoryInfo">
+		</association>
+	</resultMap>
+	<!-- 子查询 -->
+	<select id="selectCategoryInfo" parameterType="int" resultType="com.sl.po.Category">
+		select * from category where id=#{id}
+	</select>
+	
+	
+	<!-- 集合嵌套查询 -->
+	<select id="oneToManyTestCollectionSelect" resultMap="categoryInfo2">
+		select *
+		from category c
+		where c.id= #{id}
+	</select>
+	<resultMap id="categoryInfo2" type="com.sl.po.Category">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="remark" property="remark" />
+		<!--collection 映射一对多结果集    column：传递嵌套查询参数    select：嵌套查询id -->
+		<collection property="productList" ofType="com.sl.po.Product"  column="id"  select="selectProductByCategoryId">
+		</collection>
+	</resultMap>
+	<!-- 嵌套子查询 -->
+	<select id="selectProductByCategoryId" resultType="com.sl.po.Product">
+		select *
+		from products 
+		where categoryId= #{id}
+	</select>
+	
+	
+
+ <association property="productInfo" columnPrefix="p_" />
+
+
 </mapper>

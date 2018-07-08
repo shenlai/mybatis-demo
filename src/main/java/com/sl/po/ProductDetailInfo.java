@@ -76,4 +76,11 @@ public class ProductDetailInfo {
 		this.categoryRemark = categoryRemark;
 	}
 	
+	@Override
+	public String toString() {
+		return "ProductDetailInfo [Id=" + Id + ", Name=" + Name + ", Description=" + Description + ", UnitPrice="
+				+ UnitPrice + ", ImageUrl=" + ImageUrl + ", IsNew=" + IsNew + ", cityCode=" + cityCode + ", categoryId="
+				+ categoryId + ", categoryName=" + categoryName + ", categoryRemark=" + categoryRemark + "]";
+	}
+	
 }
