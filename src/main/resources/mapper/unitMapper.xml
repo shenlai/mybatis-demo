@@ -178,10 +178,4 @@
 		from products 
 		where categoryId= #{id}
 	</select>
-	
-	
-
- <association property="productInfo" columnPrefix="p_" />
-
-
 </mapper>

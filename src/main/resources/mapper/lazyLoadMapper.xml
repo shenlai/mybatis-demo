@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sl.mapper.LazyLoadMapper">
+		<!-- 分类信息查询 -->
+		<select id="lazyLoadTest"  resultMap="lazyLoadProductsByCategoryTest">
+			select * from category where id=#{id}
+		</select>
+		<resultMap id="lazyLoadProductsByCategoryTest" type="com.sl.po.Category">
+			<id column="id" property="Id"></id>
+			<result column="name" property="Name"></result>
+			<result column="remark" property="Remark"></result>
+			<!-- 一个分类对应多个产品，此处使用collection -->
+			<collection property="productList" ofType="com.sl.po.Product"  column="id" select="selectProductsByCategoryId"></collection>
+		</resultMap>
+		
+		<!-- 嵌套查询返回商品信息，延迟加载将要执行的sql -->
+		<select id="selectProductsByCategoryId"  resultType="com.sl.po.Product">
+			select * from products where categoryid=#{id} 
+		</select>
+		
+</mapper>

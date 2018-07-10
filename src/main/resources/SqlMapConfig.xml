@@ -8,6 +8,14 @@
   		<property name="password" value="123456"/>
 	</properties>
 	
+	<!--  -->
+	<settings>
+	<!-- 启用延迟加载特性，不配置默认关闭该特性-->
+	<setting name="lazyLoadingEnabled" value="true"></setting>
+	<!-- 按需加载=true,加载对象，则加载所有属性，false:使用关联属性，及时加载-->
+	 <setting name="aggressiveLazyLoading" value="true"/>
+	</settings>
+	
 	<environments default="development">
 		<!-- id属性必须和上面的defaut一致 -->
 		<environment id="development">
@@ -25,6 +33,7 @@
 		<!-- 注册productMapper.xml文件 -->
 		<mapper resource="mapper/productMapper.xml"></mapper> <!-- mapper.xml文件和mapper接口可以不在一个包下  -->
 		<mapper resource="mapper/unitMapper.xml"></mapper>
+		<mapper resource="mapper/lazyLoadMapper.xml"></mapper>
 		
 		<!-- 注册mapper接口 -->
 		<!-- <mapper class="com.sl.mapper.ProductMapper"></mapper>  --> <!--通过注册mapper接口方式： Mapper接口和mapper.xml必须在同一个包下 -->

@@ -16,7 +16,7 @@ public interface UnitMapper {
 	
 	Category oneToManyTest(int cId);
 	
-	User manyToManyTest(int id);
+	User manyToManyTest(int id);	
 	
 	
 	Product oneToOneTestAssociationSelect(int id);
