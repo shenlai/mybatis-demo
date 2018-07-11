@@ -2,20 +2,26 @@
 <!-- Mybatis DTD文档定义类型的配置信息 -->
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-<!-- 加载配置文件 -->
+	<!-- 加载配置文件 -->
 	<properties resource="db.properties">
-		<property name="username" value="root"/>
-  		<property name="password" value="123456"/>
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
 	</properties>
-	
-	<!--  -->
+
+	<!-- -->
 	<settings>
-	<!-- 启用延迟加载特性，不配置默认关闭该特性-->
-	<setting name="lazyLoadingEnabled" value="true"></setting>
-	<!-- 按需加载=true,加载对象，则加载所有属性，false:使用关联属性，及时加载-->
-	 <setting name="aggressiveLazyLoading" value="true"/>
+		<!-- 启用延迟加载特性，不配置默认关闭该特性 -->
+		<setting name="lazyLoadingEnabled" value="true"></setting>
+		<!-- 按需加载=true,加载对象，则加载所有属性，false:使用关联属性，及时加载 -->
+		<setting name="aggressiveLazyLoading" value="true" />
+		
+		
+		<!-- 二级缓存 -->
+		<setting name="cacheEnabled" value="true" />
 	</settings>
-	
+
+
+
 	<environments default="development">
 		<!-- id属性必须和上面的defaut一致 -->
 		<environment id="development">
@@ -31,12 +37,13 @@
 	</environments>
 	<mappers>
 		<!-- 注册productMapper.xml文件 -->
-		<mapper resource="mapper/productMapper.xml"></mapper> <!-- mapper.xml文件和mapper接口可以不在一个包下  -->
+		<mapper resource="mapper/productMapper.xml"></mapper> <!-- mapper.xml文件和mapper接口可以不在一个包下 -->
 		<mapper resource="mapper/unitMapper.xml"></mapper>
 		<mapper resource="mapper/lazyLoadMapper.xml"></mapper>
-		
+		<mapper resource="mapper/cacheMapper.xml"></mapper>
+
 		<!-- 注册mapper接口 -->
-		<!-- <mapper class="com.sl.mapper.ProductMapper"></mapper>  --> <!--通过注册mapper接口方式： Mapper接口和mapper.xml必须在同一个包下 -->
-		
+		<!-- <mapper class="com.sl.mapper.ProductMapper"></mapper> --> <!--通过注册mapper接口方式： Mapper接口和mapper.xml必须在同一个包下 -->
+
 	</mappers>
 </configuration>

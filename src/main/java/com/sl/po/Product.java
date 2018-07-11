@@ -1,8 +1,10 @@
 package com.sl.po;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Product {
+//启用二级缓存，JavaBean需实现Serializable接口，否则会报序列化错误
+public class Product implements Serializable{
 	private int Id;
 	private String Name;
 	private String Description;
