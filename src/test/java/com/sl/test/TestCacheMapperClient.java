@@ -60,7 +60,7 @@ public class TestCacheMapperClient {
 		System.out.println(product.getName());
 
 		//执行commit 将清空一级缓存
-		//session.commit();
+		session.commit();
 		
 		Product product2 = mapper.selectProductById(1);
 		

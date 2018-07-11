@@ -3,16 +3,16 @@
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.sl.mapper.CacheMapper">
-    <cache/>
-	<select id="selectProductById" parameterType="int" resultType="com.sl.po.Product" ><!-- useCache="false" 禁用二级缓存或者在Mapper接口上通过注解禁用-->
-		select * from products where id = #{id}
-	</select>
-	
-	<!-- update – 映射更新语句 -->
-	<update id="updateProductById" parameterType="com.sl.po.Product" flushCache="true"> <!-- flushCache="true" 禁用二级缓存或者在Mapper接口上通过注解禁用-->
-		update products set
-		Name = #{Name},IsNew=#{IsNew} 
-		where id=#{id}
-	</update>
-</mapper>
+	<mapper namespace="com.sl.mapper.CacheMapper">
+	    <cache/>
+		<select id="selectProductById" parameterType="int" resultType="com.sl.po.Product" useCache="false" ><!-- useCache="false" 禁用二级缓存或者在Mapper接口上通过注解禁用-->
+			select * from products where id = #{id}
+		</select>
+		
+		<!-- update – 映射更新语句 -->
+		<update id="updateProductById" parameterType="com.sl.po.Product" flushCache="true"> <!-- flushCache="true" 禁用二级缓存或者在Mapper接口上通过注解禁用-->
+			update products set
+			Name = #{Name},IsNew=#{IsNew} 
+			where id=#{id}
+		</update>
+	</mapper>
