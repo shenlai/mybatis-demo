@@ -26,6 +26,7 @@ import com.sl.po.ProductDetailInfo;
 import com.sl.po.ProductInfo;
 import com.sl.po.ProductVo;
 import com.sl.po.User;
+import com.sl.redis.RedisCache;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -70,7 +71,7 @@ public class TestCacheMapperClient {
 	}
 	
 	//二级缓存
-	@Test
+	//@Test
 	public void testSelectProductById2() throws IOException {
 
 		SqlSession session1 = factory.openSession();
@@ -117,7 +118,69 @@ public class TestCacheMapperClient {
 		session3.close();
 	}
 	
+	//@Test
+	public void TestRedis() {
+		
+		RedisCache cacheClient = new RedisCache("redisCacheID");
+		
+		cacheClient.putObject("javaRedisCache", "mybatis-redis");
+		
+		
+		Object value =  cacheClient.getObject("javaRedisCache");
+		
+		System.out.println(value);
+		
+	}
 	
+	
+	     //Redis 替代默认缓存
+	    @Test
+		public void testSelectProductById3() throws IOException {
+
+			SqlSession session1 = factory.openSession();
+			CacheMapper mapper1 = session1.getMapper(CacheMapper.class);
+
+			Product product = mapper1.selectProductById(1);
+
+			System.out.println(product.getName());
+			
+			/************同一session 共享一级缓存***************/
+			//CacheMapper mapper2 = session1.getMapper(CacheMapper.class);
+
+			//Product product2 = mapper2.selectProductById(1);
+
+			//System.out.println(product2.getName());
+
+			//执行commit 将清空一级缓存,无法情况二级缓存
+			session1.commit();
+			session1.close();
+			
+			//清空二级缓存 
+			//Mapper接口注解@Options(flushCache=FlushCachePolicy.TRUE) 或者Mapper.xml配置属性 flushCache="true"
+			
+			SqlSession session4 = factory.openSession();
+			CacheMapper mapper4 = session4.getMapper(CacheMapper.class);
+			
+			Product up = new Product();
+			up.setId(1);
+			up.setIsNew(true);
+			up.setName("缓存测试2");
+
+			int count = mapper4.updateProductById(up);
+			session4.commit();
+			session4.close();
+			
+			/**********不同session实例 共享二级缓存************/
+			SqlSession session3 = factory.openSession();
+			
+			CacheMapper mapper3 = session3.getMapper(CacheMapper.class);
+
+			Product product3 = mapper3.selectProductById(1);
+
+			System.out.println(product3.getName());
+			// 关闭会话
+			session3.close();
+		}
 	
 	
 

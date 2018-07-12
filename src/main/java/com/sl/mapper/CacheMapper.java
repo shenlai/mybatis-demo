@@ -11,10 +11,10 @@ import com.sun.org.apache.xpath.internal.functions.FuncFalse;
 
 public interface CacheMapper {
 	
-	@Options(useCache=false)
+	//@Options(useCache=false)
 	Product selectProductById(int id);
 	
-	@Options(flushCache=FlushCachePolicy.TRUE)  //清空 二级缓存
+	//@Options(flushCache=FlushCachePolicy.TRUE)  //清空 二级缓存
 	int updateProductById(Product product);
 	
 }
